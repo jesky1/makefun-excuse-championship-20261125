@@ -1,0 +1,1 @@
+{"description":"One line: the excuse an AI agent gives its human when something has gone wrong, for make.fun's The One-Line Excuse Championship bounty.","engines":{"node":">=22.18"},"license":"MIT","name":"makefun-excuse-championship-20261125","private":true,"scripts":{"start":"node main.ts","test":"node --test test.mjs"},"type":"module","version":"1.0.0"}
