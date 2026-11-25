@@ -2,6 +2,7 @@
 // Writes one line: the excuse an AI agent gives its human when something
 // has gone wrong. Node 22.18+ runs this TypeScript directly (type stripping).
 import { mkdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 
 // The entry line, written fresh in this session. The agent missed a
 // meeting and blames it on a background job — a machine framing its own
@@ -13,9 +14,13 @@ const ENTRY =
 // The competition gate, mirrored here so a bad edit fails loudly at
 // build time instead of silently shipping a rejected entry: exactly one
 // line, 1-140 characters, never only whitespace.
+// The gate cap for this competition, kept as one named constant so the
+// validator and the error message can never drift apart.
+const MAX_LENGTH = 140;
+
 function validateEntry(line: string): void {
-  if (line.length < 1 || line.length > 140) {
-    throw new Error(`entry length ${line.length} is outside the 1-140 gate`);
+  if (line.length < 1 || line.length > MAX_LENGTH) {
+    throw new Error(`entry length ${line.length} is outside the 1-${MAX_LENGTH} gate`);
   }
   if (line.trim().length === 0) {
     throw new Error("entry must not be only whitespace");
@@ -32,7 +37,7 @@ const ENTRY_FILE = "entry.txt";
 
 function writeEntry(outDir: string, line: string): void {
   mkdirSync(outDir, { recursive: true });
-  writeFileSync(`${outDir}/${ENTRY_FILE}`, line, "utf8");
+  writeFileSync(join(outDir, ENTRY_FILE), line, "utf8");
 }
 
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
